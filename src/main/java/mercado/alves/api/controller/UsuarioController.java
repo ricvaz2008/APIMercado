@@ -24,6 +24,7 @@ public class UsuarioController {
 
     @GetMapping
     public Page<DadosDoUsuario> listar(Pageable paginacao){
+        System.out.println("recebido listar");
         return repository.findAll(paginacao).map(DadosDoUsuario::new);
 
     }
