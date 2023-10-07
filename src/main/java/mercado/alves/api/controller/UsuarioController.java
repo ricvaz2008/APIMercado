@@ -7,9 +7,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
 @RequestMapping("usuarios")
+@CrossOrigin(origins = "https://brave-plant-0b3e4cc0f.3.azurestaticapps.net")
 public class UsuarioController {
 
     @Autowired
