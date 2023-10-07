@@ -18,6 +18,7 @@ public class UsuarioController {
     @PostMapping
     @Transactional
     public void cadastrar(@RequestBody DadosCadastroUsuario dados){
+        System.out.println("recebido cadastrar");
         repository.save(new Usuario(dados));
 
     }
