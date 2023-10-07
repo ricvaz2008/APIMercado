@@ -20,14 +20,13 @@ public class UsuarioController {
 
     @PostMapping
     @Transactional
-    public void cadastrar(@RequestBody @Valid DadosCadastroUsuario dados){
+    public void cadastrar(@RequestBody @Valid DadosCadastroUsuario dados) {
         System.out.println(dados);
         repository.save(new Usuario(dados));
     }
 
     @GetMapping
-    public Page<DadosDoUsuario> listar(Pageable paginacao){
-        System.out.println("recebido listar");
+    public Page<DadosDoUsuario> listar(Pageable paginacao) {
         return repository.findAll(paginacao).map(DadosDoUsuario::new);
 
     }
@@ -42,23 +41,28 @@ public class UsuarioController {
 
     @DeleteMapping("/{id}")
     @Transactional
-    public void excluir(@PathVariable Long id){
+    public void excluir(@PathVariable Long id) {
         repository.deleteById(id);
     }
 
     @GetMapping("/verifica-acesso")
     public ResponseEntity<DadoDeAcesso> verificaAcesso(
-        @RequestParam("login") String login,
-        @RequestParam("senha") String senha){
+            @RequestParam("login") String login,
+            @RequestParam("senha") String senha) {
 
         System.out.println(login);
         System.out.println(senha);
         DadoDeAcesso acesso = repository.findAcessoByLoginAndSenha(login, senha);
 
-            if (acesso != null) {
-                return ResponseEntity.ok(acesso);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+        if (acesso != null) {
+            return ResponseEntity.ok(acesso);
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/localiza-usuario")
+    public Usuario findUsuarioById(@RequestParam Long id) {
+        return repository.findById(id).orElse(null);
+    }
+}
