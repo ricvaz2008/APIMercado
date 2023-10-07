@@ -1,5 +1,6 @@
 package mercado.alves.api.controller;
 
+import jakarta.validation.Valid;
 import mercado.alves.api.usuario.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
 @RequestMapping("usuarios")
-@CrossOrigin(origins = "https://brave-plant-0b3e4cc0f.3.azurestaticapps.net")
+@CrossOrigin(origins = {"https://brave-plant-0b3e4cc0f.3.azurestaticapps.net", "https://127.0.0.1:5000"})
 public class UsuarioController {
 
     @Autowired
@@ -19,16 +20,23 @@ public class UsuarioController {
 
     @PostMapping
     @Transactional
-    public void cadastrar(@RequestBody DadosCadastroUsuario dados){
-        System.out.println("recebido cadastrar");
+    public void cadastrar(@RequestBody @Valid DadosCadastroUsuario dados){
+        System.out.println(dados);
         repository.save(new Usuario(dados));
-
     }
 
     @GetMapping
     public Page<DadosDoUsuario> listar(Pageable paginacao){
         System.out.println("recebido listar");
         return repository.findAll(paginacao).map(DadosDoUsuario::new);
+
+    }
+
+    @PutMapping
+    @Transactional
+    public void atualizar(@RequestBody @Valid DadosCadastroUsuario dados) {
+        var funcionario = repository.getReferenceById(String.valueOf(dados.id()));
+        funcionario.atualizarInformacoes(dados);
 
     }
 

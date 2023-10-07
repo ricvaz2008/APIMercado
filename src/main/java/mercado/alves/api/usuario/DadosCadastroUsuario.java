@@ -1,16 +1,13 @@
 package mercado.alves.api.usuario;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record DadosCadastroUsuario(
-        @NotBlank
+        @NotNull
+        Long id,
         String nome,
-        @NotBlank
         String cargo,
-        @NotBlank
         String login,
-        @NotBlank
         String senha,
-        @NotBlank
         String acesso) {
 }
