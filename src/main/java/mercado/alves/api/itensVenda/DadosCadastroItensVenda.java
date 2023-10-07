@@ -7,7 +7,7 @@ import java.util.Date;
 public record DadosCadastroItensVenda(
         @NotNull
         String numeroCupom,
-        Double numeroVenda,
+        String numeroVenda,
         Integer quantidade,
         String codigo,
         Double valor) {

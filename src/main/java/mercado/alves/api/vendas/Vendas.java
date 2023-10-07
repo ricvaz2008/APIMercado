@@ -17,7 +17,7 @@ import java.util.Date;
 public class Vendas {
 
     @Id
-    private Double numeroVenda;
+    private String numeroVenda;
     private String cpf;
     private String caixa;
     private Double valorTotal;

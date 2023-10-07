@@ -8,8 +8,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 @Repository
-public interface VendasRepository extends JpaRepository<Vendas, Double> {
+public interface VendasRepository extends JpaRepository<Vendas, String> {
 
     @Query
-    Optional<Vendas> findByNumeroVenda(@Param("numeroVenda") Double numeroVenda);
+    Optional<Vendas> findByNumeroVenda(@Param("numeroVenda") String numeroVenda);
 }

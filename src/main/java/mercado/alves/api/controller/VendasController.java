@@ -42,12 +42,12 @@ public class VendasController {
 
     @DeleteMapping("/{numeroVenda}")
     @Transactional
-    public void excluir(@PathVariable Double numeroVenda) {
+    public void excluir(@PathVariable String numeroVenda) {
         repository.deleteById(numeroVenda);
     }
 
     @GetMapping("/localiza-venda")
-    public Vendas findVendasById(@RequestParam Double numeroVenda) {
+    public Vendas findVendasById(@RequestParam String numeroVenda) {
         return repository.findByNumeroVenda(numeroVenda).orElse(null);
     }
 }

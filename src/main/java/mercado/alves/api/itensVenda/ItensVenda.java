@@ -18,7 +18,7 @@ public class ItensVenda {
 
     @Id
     private String numeroCupom;
-    private Double numeroVenda;
+    private String numeroVenda;
     private Integer quantidade;
     private String codigo;
     private Double valor;
