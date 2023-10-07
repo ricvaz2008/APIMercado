@@ -35,9 +35,15 @@ public class UsuarioController {
     @PutMapping
     @Transactional
     public void atualizar(@RequestBody @Valid DadosCadastroUsuario dados) {
-        var funcionario = repository.getReferenceById(String.valueOf(dados.id()));
+        var funcionario = repository.getReferenceById(dados.id());
         funcionario.atualizarInformacoes(dados);
 
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public void excluir(@PathVariable Long id){
+        repository.deleteById(id);
     }
 
     @GetMapping("/verifica-acesso")
