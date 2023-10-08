@@ -49,11 +49,9 @@ public class EstoqueController {
 
             return ResponseEntity.ok("{\"message\": \"modificado\"}");
         } catch (Exception e) {
-            // Handle any exceptions that might occur during the update process
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"error\": \"An error occurred\"}");
         }
     }
-
 
     @DeleteMapping("/{codigo}")
     @Transactional
