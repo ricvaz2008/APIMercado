@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -53,6 +54,26 @@ public class EstoqueController {
         }
     }
 
+    @PutMapping("/altera-quantidade")
+    @Transactional
+    public ResponseEntity<String> alteraQuantidade(@RequestBody @Valid DadosCadastroEstoque dados) {
+        try {
+            var estoqueOptional = repository.findByCodigoAndStatus(dados.codigo(), "ativo");
+
+            if (estoqueOptional.isPresent()) {
+                Estoque estoque = estoqueOptional.get();
+                estoque.atualizarInformacoes(dados);
+                repository.save(estoque);
+
+                return ResponseEntity.ok("{\"message\": \"modificado\"}");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"Item not found or not active\"}");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"error\": \"An error occurred\"}");
+        }
+    }
+
     @DeleteMapping("/{codigo}")
     @Transactional
     public ResponseEntity<String> excluir(@PathVariable String codigo) {
@@ -65,8 +86,9 @@ public class EstoqueController {
     }
 
     @GetMapping("/localiza-estoque")
-    public Estoque findEstoqueById(@RequestParam String codigo) {
-        return repository.findByCodigo(codigo).orElse(null);
+    public List<Estoque> findEstoqueByPartialCodigo(@RequestParam String codigo) {
+        return repository.findByCodigoContaining(codigo);
     }
+
 }
 

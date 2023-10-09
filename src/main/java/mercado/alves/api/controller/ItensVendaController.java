@@ -1,20 +1,18 @@
 package mercado.alves.api.controller;
 
 import jakarta.validation.Valid;
-import mercado.alves.api.estoque.DadosCadastroEstoque;
-import mercado.alves.api.estoque.DadosDoEstoque;
-import mercado.alves.api.estoque.Estoque;
-import mercado.alves.api.estoque.EstoqueRepository;
-import mercado.alves.api.itensVenda.DadosCadastroItensVenda;
-import mercado.alves.api.itensVenda.DadosDeItensVenda;
-import mercado.alves.api.itensVenda.ItensVenda;
-import mercado.alves.api.itensVenda.ItensVendaRepository;
+import mercado.alves.api.itensVenda.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("itensVenda")
@@ -26,14 +24,15 @@ public class ItensVendaController {
 
     @PostMapping
     @Transactional
-    public void cadastrar(@RequestBody @Valid DadosCadastroItensVenda dados) {
+    public ResponseEntity<Map<String, String>> cadastrar(@RequestBody @Valid DadosCadastroItensVenda dados) {
         repository.save(new ItensVenda(dados));
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "vendaFinalizada");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
-
     @GetMapping
     public Page<DadosDeItensVenda> listar(Pageable paginacao) {
         return repository.findAll(paginacao).map(DadosDeItensVenda::new);
-
     }
 
     @GetMapping("/localiza-itemVenda")
