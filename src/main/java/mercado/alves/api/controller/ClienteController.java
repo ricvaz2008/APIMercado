@@ -1,6 +1,7 @@
 package mercado.alves.api.controller;
 
 import jakarta.validation.Valid;
+import mercado.alves.api.cliente.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,12 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import mercado.alves.api.cliente.ClienteRepository;
-import mercado.alves.api.cliente.Cliente;
-import mercado.alves.api.cliente.DadosDoCliente;
-import mercado.alves.api.cliente.DadosCadastroCliente;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -25,6 +23,9 @@ public class ClienteController {
     @Autowired
     private ClienteRepository repository;
 
+    @Autowired
+    private CustomClienteItems customClienteItems;
+
     @PostMapping
     @Transactional
     public ResponseEntity<Map<String, String>> cadastrar(@RequestBody @Valid DadosCadastroCliente dados) {
@@ -34,9 +35,46 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping
+    @GetMapping("/listar")
     public Page<DadosDoCliente> listar(Pageable paginacao) {
         return repository.findAll(paginacao).map(DadosDoCliente::new);
+    }
+
+    @GetMapping("/custom-listar")
+    public ResponseEntity<List<DadosCustomizaveisDoCliente>> customListar (
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false, defaultValue = "asc") String sortOrder) {
+
+        List<DadosCustomizaveisDoCliente> joinedData = customClienteItems.getJoinedData();
+
+        if (sortBy != null) {
+
+            joinedData.sort((item1, item2) -> {
+                int compareResult;
+                switch (sortBy) {
+                    case "cpf":
+                        compareResult = item1.getCpf().compareTo(item2.getCpf());
+                        break;
+                    case "nome":
+                        compareResult = item1.getNome().compareTo(item2.getNome());
+                        break;
+                    case "compra":
+                        compareResult = item1.getData().compareTo(item2.getData());
+                        break;
+                    case "cupom":
+                        compareResult = item1.getCupom().compareTo(item2.getCupom());
+                        break;
+
+                    default:
+                        compareResult = 0;
+                        break;
+                }
+
+                return sortOrder.equals("asc") ? compareResult : -compareResult;
+            });
+        }
+
+        return ResponseEntity.ok(joinedData);
     }
 
     @PutMapping
