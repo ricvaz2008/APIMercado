@@ -71,4 +71,8 @@ public class Estoque {
             this.foto = dados.foto();
         }
     }
+
+    public void setQuantidade(Integer quantidade) {
+        this.quantidade = quantidade;
+    }
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("estoque")
@@ -54,26 +55,6 @@ public class EstoqueController {
         }
     }
 
-    @PutMapping("/altera-quantidade")
-    @Transactional
-    public ResponseEntity<String> alteraQuantidade(@RequestBody @Valid DadosCadastroEstoque dados) {
-        try {
-            var estoqueOptional = repository.findByCodigoAndStatus(dados.codigo(), "ativo");
-
-            if (estoqueOptional.isPresent()) {
-                Estoque estoque = estoqueOptional.get();
-                estoque.atualizarInformacoes(dados);
-                repository.save(estoque);
-
-                return ResponseEntity.ok("{\"message\": \"modificado\"}");
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"Item not found or not active\"}");
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"error\": \"An error occurred\"}");
-        }
-    }
-
     @DeleteMapping("/{codigo}")
     @Transactional
     public ResponseEntity<String> excluir(@PathVariable String codigo) {
@@ -90,5 +71,36 @@ public class EstoqueController {
         return repository.findByCodigoContaining(codigo);
     }
 
+
+    @PutMapping("/altera-quantidade")
+    @Transactional
+    public ResponseEntity<String> alteraQuantidade(@RequestParam String partialCodigo, @RequestParam int quantidade) {
+        try {
+            Optional<Estoque> estoqueOptional = repository.findFirstByCodigoContainingAndStatus(partialCodigo, "Ativo");
+
+            if (estoqueOptional.isPresent()) {
+                Estoque estoque = estoqueOptional.get();
+
+                int estoqueQuantidade = estoque.getQuantidade();
+
+                int newQuantidade = estoqueQuantidade - quantidade;
+
+                if (newQuantidade < 0) {
+                    return ResponseEntity.badRequest().body("{\"error\": \"Invalid quantidade\"}");
+                }
+
+                estoque.setQuantidade(newQuantidade);
+
+                repository.save(estoque);
+
+                return ResponseEntity.ok("{\"message\": \"modificado\"}");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"Active item not found\"}");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"error\": \"An error occurred\"}");
+        }
+    }
 }
 

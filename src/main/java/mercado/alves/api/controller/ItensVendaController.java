@@ -89,7 +89,6 @@ public class ItensVendaController {
                         break;
                 }
 
-                // Reverse the order if sortOrder is "desc"
                 return sortOrder.equals("asc") ? compareResult : -compareResult;
             });
         }

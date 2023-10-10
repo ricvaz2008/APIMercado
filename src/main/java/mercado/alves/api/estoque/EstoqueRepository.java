@@ -16,5 +16,5 @@ public interface EstoqueRepository extends JpaRepository<Estoque, String> {
 
     List<Estoque> findByCodigoContaining(String codigo);
 
-    Optional<Estoque> findByCodigoAndStatus(String codigo, String status);
+    Optional<Estoque> findFirstByCodigoContainingAndStatus(String codigo, String status);
 }

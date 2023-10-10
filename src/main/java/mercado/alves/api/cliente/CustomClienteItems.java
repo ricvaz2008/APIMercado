@@ -6,6 +6,7 @@ import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +18,7 @@ public class CustomClienteItems {
     private EntityManager entityManager;
 
     public List<DadosCustomizaveisDoCliente> getJoinedData() {
-        String jpql = "SELECT c.cpf, c.nome, v.data, v.cupom " +
+        String jpql = "SELECT c.cpf, c.nome, v.data, v.cupom, v.hora " +
                         "FROM clientes c " +
                         "JOIN Vendas v ON c.cpf = v.cpf " +
                         "WHERE (c.cpf, c.nome, v.cupom, v.data) IN (" +
@@ -36,11 +37,11 @@ public class CustomClienteItems {
             String nome = (String) result[1];
             Date data = (Date) result[2];
             String cupom = (String) result[3];
+            Time hora = (Time) result[4];
 
-            DadosCustomizaveisDoCliente dadosCustomizaveisDoCliente = new DadosCustomizaveisDoCliente(cpf, nome, data, cupom);
+            DadosCustomizaveisDoCliente dadosCustomizaveisDoCliente = new DadosCustomizaveisDoCliente(cpf, nome, data, cupom, hora);
             dadosCustomizaveisDoClienteList.add(dadosCustomizaveisDoCliente);
         }
-
         return dadosCustomizaveisDoClienteList;
     }
 }

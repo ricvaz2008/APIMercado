@@ -9,7 +9,9 @@ import mercado.alves.api.vendas.Vendas;
 import mercado.alves.api.vendas.VendasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -53,6 +56,18 @@ public class VendasController {
     @GetMapping("/localiza-venda")
     public Vendas findVendasById(@RequestParam String cupom) {
         return repository.findByCupom(cupom).orElse(null);
+    }
+
+    @GetMapping("/venda-cpf")
+    public List<Vendas> findVendasByCpf(
+            @RequestParam String cpf,
+            @RequestParam(required = false) String sortField,
+            @RequestParam(required = false, defaultValue = "asc") String sortOrder
+    ) {
+        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortField);
+        Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE, sort); // Create a Pageable with sorting
+        Page<Vendas> result = repository.findAllByCpf(cpf, pageable);
+        return result.getContent();
     }
 
     @GetMapping("/busca-customizada")
