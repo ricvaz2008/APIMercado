@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface VendasRepository extends JpaRepository<Vendas, String> {
 
     @Query
-    Optional<Vendas> findByNumeroVenda(@Param("numeroVenda") String numeroVenda);
+    Optional<Vendas> findByCupom(@Param("cupom") String cupom);
 }

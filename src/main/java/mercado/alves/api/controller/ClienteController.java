@@ -37,7 +37,6 @@ public class ClienteController {
     @GetMapping
     public Page<DadosDoCliente> listar(Pageable paginacao) {
         return repository.findAll(paginacao).map(DadosDoCliente::new);
-
     }
 
     @PutMapping

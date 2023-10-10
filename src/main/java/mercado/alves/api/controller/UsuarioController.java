@@ -68,8 +68,6 @@ public class UsuarioController {
             @RequestParam("login") String login,
             @RequestParam("senha") String senha) {
 
-        System.out.println(login);
-        System.out.println(senha);
         DadoDeAcesso acesso = repository.findAcessoByLoginAndSenha(login, senha);
 
         if (acesso != null) {

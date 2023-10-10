@@ -51,8 +51,13 @@ public class VendasController {
     }
 
     @GetMapping("/localiza-venda")
-    public Vendas findVendasById(@RequestParam String numeroVenda) {
-        return repository.findByNumeroVenda(numeroVenda).orElse(null);
+    public Vendas findVendasById(@RequestParam String cupom) {
+        return repository.findByCupom(cupom).orElse(null);
+    }
+
+    @GetMapping("/busca-customizada")
+    public Vendas customSearch(@RequestParam String cupom) {
+        return repository.findByCupom(cupom).orElse(null);
     }
 }
 

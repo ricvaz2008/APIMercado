@@ -11,7 +11,7 @@ import java.sql.Time;
 import java.util.Date;
 
 @Table(name = "vendas")
-@Entity(name = "vendas")
+@Entity(name = "Vendas")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,6 +24,7 @@ public class Vendas {
     private Date data;
     private Time hora;
     private String pagamento;
+    private String cupom;
     private Double valorTotal;
 
     public Vendas(DadosCadastroVendas dados) {
@@ -33,6 +34,7 @@ public class Vendas {
         this.data = dados.data();
         this.hora = dados.hora();
         this.pagamento = dados.pagamento();
+        this.cupom = dados.cupom();
         this.valorTotal = dados.valorTotal();
     }
 
@@ -60,6 +62,10 @@ public class Vendas {
 
         if(dados.pagamento() != null) {
             this.pagamento = dados.pagamento();
+        }
+
+        if(dados.cupom() != null) {
+            this.cupom = dados.cupom();
         }
 
         if(dados.valorTotal() != null) {

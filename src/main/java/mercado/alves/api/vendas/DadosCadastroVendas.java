@@ -13,5 +13,6 @@ public record DadosCadastroVendas(
         Date data,
         Time hora,
         String pagamento,
+        String cupom,
         Double valorTotal) {
 }
