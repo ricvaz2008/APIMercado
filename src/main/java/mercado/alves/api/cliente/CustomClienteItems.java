@@ -19,13 +19,13 @@ public class CustomClienteItems {
 
     public List<DadosCustomizaveisDoCliente> getJoinedData() {
         String jpql = "SELECT c.cpf, c.nome, v.data, v.cupom, v.hora " +
-                        "FROM clientes c " +
-                        "JOIN Vendas v ON c.cpf = v.cpf " +
-                        "WHERE (c.cpf, c.nome, v.cupom, v.data) IN (" +
-                        "SELECT c1.cpf, c1.nome, v1.cupom, MAX(v1.data) as max_data " +
-                        "FROM clientes c1 " +
-                        "JOIN Vendas v1 ON c1.cpf = v1.cpf " +
-                        "GROUP BY c1.cpf, c1.nome, v1.cupom)";
+                "FROM clientes c " +
+                "JOIN Vendas v ON c.cpf = v.cpf " +
+                "WHERE (c.cpf, c.nome, v.cupom, v.data) IN (" +
+                "SELECT c1.cpf, c1.nome, v1.cupom, MAX(v1.data) as max_data " +
+                "FROM clientes c1 " +
+                "JOIN Vendas v1 ON c1.cpf = v1.cpf " +
+                "GROUP BY c1.cpf, c1.nome, v1.cupom)";
 
         TypedQuery<Object[]> query = entityManager.createQuery(jpql, Object[].class);
 

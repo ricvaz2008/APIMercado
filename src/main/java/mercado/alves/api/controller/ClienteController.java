@@ -48,6 +48,7 @@ public class ClienteController {
         List<DadosCustomizaveisDoCliente> joinedData = customClienteItems.getJoinedData();
 
         if (sortBy != null) {
+            System.out.println(joinedData);
 
             joinedData.sort((item1, item2) -> {
                 int compareResult;
